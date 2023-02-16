@@ -5,6 +5,10 @@ A simple react website for product listing inventory
 Tech in use: react-js express  mysql tailwind
 
 ---
+### live site
+https://inventory.projectdevworks.com/
+
+---
 ### setup your environment variables (.env) file first:
 ```
 mysql_username= <your username>
