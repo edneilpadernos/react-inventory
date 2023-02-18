@@ -21,6 +21,8 @@ function Login(props) {
       localStorage.setItem('token',res.data.accessToken)
       localStorage.setItem('user',res.data.username)
       navigate('/dashboard')
+    } else if (res.isonline) {
+      setError({show:true,msg:"The account you tried to log in is already active."})
     } else {
       setError({show:true,msg:"invalid user"})
     }

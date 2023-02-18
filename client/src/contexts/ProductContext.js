@@ -38,12 +38,13 @@ function ProductContextProvider (props) {
         return response.json()
     }
 
-    const updateProduct = async (id,name,quantity,category,token) => {
+    const updateProduct = async (id,name,quantity,category,timeStamp,token) => {
         let data  = {
             id:id,
             name: name,
             quantity:quantity,
-            category:category
+            category:category,
+            updated_at:timeStamp
         }
         const response = await fetch(`${process.env.REACT_APP_API_URL}/products/update`, {
             method: 'POST',

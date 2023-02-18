@@ -9,6 +9,7 @@ function EditProduct(props) {
     const nameRef = useRef()
     const categoryRef = useRef()
     const quantityRef = useRef()
+    const timeStampRef = useRef()
     const idRef = useRef()
 
     const hideForm = () => {
@@ -42,6 +43,7 @@ function EditProduct(props) {
             nameRef.current.value,
             quantityRef.current.value,
             categoryRef.current.value,
+            timeStampRef.current.value,
             localStorage.getItem('token')
         )
         if(res.success){
@@ -54,6 +56,8 @@ function EditProduct(props) {
             if(result.success){
                 setProductList(result.data)
             }
+        } else {
+            setError({show:true,msg:"data not in sync. Please reload the page."})
         }
         props.setLoading(false)
     }
@@ -61,10 +65,12 @@ function EditProduct(props) {
     useEffect(()=>{
         let getProductToEdit = () => {
             let productToEdit = productList.filter(data=>data.id === productId)
+            console.log(productToEdit)
             idRef.current.value = productToEdit[0].id
             nameRef.current.value = productToEdit[0].name
             categoryRef.current.value = productToEdit[0].category
             quantityRef.current.value = productToEdit[0].quantity
+            timeStampRef.current.value = productToEdit[0].updated_at
         }
         getProductToEdit()
         // eslint-disable-next-line
@@ -92,6 +98,7 @@ function EditProduct(props) {
                             <div className="py-1">
                             <label htmlFor='productName' className="text-sm text-gray-500">Product Name</label>
                             <input type="hidden" ref={idRef} />
+                            <input type="hidden" ref={timeStampRef} />
                             <input type="text" ref={nameRef} id="productName" className="border p-2 w-full" required/>
                             </div>
                             <div className="py-1">

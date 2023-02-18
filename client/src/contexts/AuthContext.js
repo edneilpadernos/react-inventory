@@ -49,10 +49,27 @@ function AuthContextProvider (props) {
         return response.json()
     }
 
+    const signOut = async (username,token) => {
+        let data  = {
+            username: username,
+        }
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/signOut`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        return response.json()
+    }
+
     const values = {
         register,
         signIn,
-        isLoggedIn
+        isLoggedIn,
+        signOut
     }
 
     return (

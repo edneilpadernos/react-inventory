@@ -6,7 +6,7 @@ import { AuthContext } from '../contexts/AuthContext'
 
 function Dashboard(props) {
 
-  const {isLoggedIn} = useContext(AuthContext)
+  const {isLoggedIn,signOut} = useContext(AuthContext)
 
   const [showAddForm,setShowAddForm] = useState(false)
   const [activeTab,setActiveTab] = useState('productList')
@@ -25,10 +25,14 @@ function Dashboard(props) {
     setActiveTab(tab)
   }
 
-  const logOut = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    navigate('/')
+  const logOut = async () => {
+    let res = await signOut(localStorage.getItem('user'),localStorage.getItem('token'))
+    if(res.success){
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      navigate('/')
+    }
+    
   }
 
   let checkUser = async () => {

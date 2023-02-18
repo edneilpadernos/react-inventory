@@ -23,7 +23,7 @@ router.get('/',token.authenticate,(req,res)=>{
 router.post('/add',token.authenticate,(req,res)=>{
     let {name,quantity,category} = req.body
     try{
-        db.query(`insert into products (name,quantity,category)values('${name}','${quantity}','${category}')`, async (error,data)=>{
+        db.query(`insert into products (name,quantity,category,created_at)values('${name}','${quantity}','${category}','${Date.now()}')`, async (error,data)=>{
             if(error){
                 res.status(200).json({error:error})
             } 
@@ -37,16 +37,27 @@ router.post('/add',token.authenticate,(req,res)=>{
 })
 
 router.post('/update',token.authenticate,(req,res)=>{
-    let {id,name,quantity,category} = req.body
+    let {id,name,quantity,category,updated_at} = req.body
     try{
-        db.query(`update products set name='${name}', quantity='${quantity}' , category='${category}' where id ='${id}'`, async (error,data)=>{
-            if(error){
+        db.query(`select id,updated_at from products where id='${id}' and updated_at='${updated_at}'`,(error,timeStampData)=>{
+            if(error) {
                 res.status(200).json({error:error})
-            } 
-            else{
-                res.status(200).json({success:true})
-            } 
+            } else {
+                if(timeStampData.length>0) {
+                    db.query(`update products set name='${name}', quantity='${quantity}' , category='${category}' , updated_at='${Date.now()}' where id ='${id}'`, async (error,data)=>{
+                        if(error){
+                            res.status(200).json({error:error})
+                        } 
+                        else{
+                            res.status(200).json({success:true})
+                        } 
+                    })
+                } else {
+                    res.status(200).json({error:'data not in sync'})
+                }
+            }
         })
+        
     } catch (error){
         res.status(200).json({error:error})
     }
